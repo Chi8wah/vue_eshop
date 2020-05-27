@@ -6,17 +6,25 @@
         <img src="../assets/logo.png" alt="">
       </div>
 <!--      表单区域-->
-      <el-form class="loginForm">
+      <el-form
+        class="loginForm"
+        :model="loginForm"
+        :rules="loginFormRules">
 <!--        用户名-->
-        <el-form-item>
+        <el-form-item
+          prop="username">
           <el-input
+            v-model="loginForm.username"
             prefix-icon="el-icon-user-solid">
           </el-input>
         </el-form-item>
 <!--        密码-->
-        <el-form-item>
+        <el-form-item
+          prop="password">
           <el-input
-            prefix-icon="el-icon-key">
+            v-model="loginForm.password"
+            prefix-icon="el-icon-key"
+            type="password">
           </el-input>
         </el-form-item>
 <!--        按钮区域-->
@@ -31,7 +39,29 @@
 
 <script>
 export default {
-  name: 'Login'
+  name: 'Login',
+  data () {
+    return {
+      // 登录表单数据绑定对象
+      loginForm: {
+        username: 'zs',
+        password: '123'
+      },
+      // 表单验证规则对象
+      loginFormRules: {
+        // 验证用户名
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+        ],
+        // 验证密码
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+        ]
+      }
+    }
+  }
 }
 </script>
 
