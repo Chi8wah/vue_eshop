@@ -7,6 +7,7 @@
       </div>
 <!--      表单区域-->
       <el-form
+        ref="loginFormRef"
         class="loginForm"
         :model="loginForm"
         :rules="loginFormRules">
@@ -29,8 +30,8 @@
         </el-form-item>
 <!--        按钮区域-->
         <el-form-item class="btns">
-          <el-button type="primary">登录</el-button>
-          <el-button type="info">重置</el-button>
+          <el-button type="primary" @click="login">登录</el-button>
+          <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -44,8 +45,8 @@ export default {
     return {
       // 登录表单数据绑定对象
       loginForm: {
-        username: 'zs',
-        password: '123'
+        username: 'admin',
+        password: '123456'
       },
       // 表单验证规则对象
       loginFormRules: {
@@ -60,6 +61,25 @@ export default {
           { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
         ]
       }
+    }
+  },
+  methods: {
+    // 点击重置按钮重置登录表单
+    resetLoginForm () {
+      this.$refs.loginFormRef.resetFields()
+    },
+    login () {
+      this.$refs.loginFormRef.validate(async valid => {
+        if (!valid) return this.$message.error('输入有误')
+        const { data: res } = await this.$http.post('login', this.loginForm)
+        if (res.meta.status !== 200) return this.$message.error('登录失败')
+        this.$message.success('登录成功')
+        console.log(res)
+        // 将登录成功之后的token保存到客户端的sessionStorage中
+        window.sessionStorage.setItem('token', res.data.token)
+        // 跳转到/home
+        this.$router.push('/home')
+      })
     }
   }
 }
