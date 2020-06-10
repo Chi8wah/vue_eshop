@@ -74,7 +74,6 @@ export default {
         const { data: res } = await this.$http.post('login', this.loginForm)
         if (res.meta.status !== 200) return this.$message.error('登录失败')
         this.$message.success('登录成功')
-        console.log(res)
         // 将登录成功之后的token保存到客户端的sessionStorage中
         window.sessionStorage.setItem('token', res.data.token)
         // 跳转到/home
